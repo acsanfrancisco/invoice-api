@@ -25,7 +25,7 @@ public class Customer {
     @Column(name = "full_name", nullable = false)
     private String fullName;
 
-    @Column(name = "document", nullable = false, length = 14)
+    @Column(name = "document", nullable = false, length = 14, unique = true)
     private String document;
 
     @Column(name = "whatsapp_number", nullable = false, length = 13)

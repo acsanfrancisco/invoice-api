@@ -37,7 +37,7 @@ public class Invoice {
     private BigDecimal grossValue;
 
     @Column(name = "discount", nullable = false)
-    private BigDecimal discount = BigDecimal.valueOf(0.0);
+    private BigDecimal discount;
 
     @Column(name = "net_value", nullable = false)
     private BigDecimal netValue;
