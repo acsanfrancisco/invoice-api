@@ -4,6 +4,7 @@ CREATE TABLE tb_customer(
     document VARCHAR(14) NOT NULL UNIQUE,
     whatsapp_number VARCHAR(13) NOT NULL,
     document_type VARCHAR(4) NOT NULL,
+    is_active BOOLEAN NOT NULL,
     CHECK (
         (document_type = 'CPF' AND length(document) = 11)
         OR

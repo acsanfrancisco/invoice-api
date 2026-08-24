@@ -1,8 +1,21 @@
 package acsanfrancisco.invoice_system.repository;
 
 import acsanfrancisco.invoice_system.entity.Customer;
+import acsanfrancisco.invoice_system.entity.enums.DocumentType;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
-public interface CustomerRepository extends JpaRepository<Customer, UUID> {
+public interface CustomerRepository extends JpaRepository<Customer, UUID>, JpaSpecificationExecutor<Customer> {
+
+    Optional<Customer> findByDocument(String document);
+
+    List<Customer> findByFullName(String name);
+
+    Optional<Customer> findByWhatsappNumber(String whatsappNumber);
+
+    List<Customer> findByDocumentType(DocumentType documentType);
 }
