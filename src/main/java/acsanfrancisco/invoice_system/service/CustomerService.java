@@ -7,6 +7,7 @@ import acsanfrancisco.invoice_system.entity.Customer;
 import acsanfrancisco.invoice_system.entity.enums.DocumentType;
 import acsanfrancisco.invoice_system.exception.CustomerIsNotActiveException;
 import acsanfrancisco.invoice_system.exception.CustomerNotFoundException;
+import acsanfrancisco.invoice_system.exception.DocumentAlreadyRegisteredException;
 import acsanfrancisco.invoice_system.mapper.CustomerMapper;
 import acsanfrancisco.invoice_system.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,9 @@ public class CustomerService {
 
     @Transactional
     public CustomerResponseDto createCustomer(CreateCustomerDto dto) {
+        if(customerRepository.existsByDocument(dto.getDocument())){
+            throw new DocumentAlreadyRegisteredException("Document already exists. Document: " + dto.getDocument());
+        }
         Customer customer = CustomerMapper.toEntity(dto);
         return CustomerMapper
                 .toDto(customerRepository.save(customer));
