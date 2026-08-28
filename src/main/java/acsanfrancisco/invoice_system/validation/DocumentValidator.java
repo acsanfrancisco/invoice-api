@@ -22,11 +22,11 @@ public class DocumentValidator implements ConstraintValidator<ValidDocument, Str
         }
 
         if(value.length() == 11){
-            return cpfValidator.isEligible(value);
+            return cpfValidator.invalidMessagesFor(value).isEmpty();
         }
 
         if(value.length() == 14){
-            return cnpjValidator.isEligible(value);
+            return cnpjValidator.invalidMessagesFor(value).isEmpty();
         }
         return false;
     }
