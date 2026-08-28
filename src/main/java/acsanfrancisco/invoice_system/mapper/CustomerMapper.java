@@ -5,10 +5,7 @@ import acsanfrancisco.invoice_system.dto.CustomerResponseDto;
 import acsanfrancisco.invoice_system.dto.UpdateCustomerDto;
 import acsanfrancisco.invoice_system.entity.Customer;
 import acsanfrancisco.invoice_system.entity.enums.DocumentType;
-import org.hibernate.sql.Update;
-
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CustomerMapper {
 
