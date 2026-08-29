@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,7 +28,7 @@ public class Invoice {
 
     @Column(name = "issued_at", nullable = false)
     @CreatedDate
-    private Instant issuedAt;
+    private LocalDateTime issuedAt;
 
     @Column(name = "due_date", nullable = false)
     private LocalDate dueDate;

@@ -16,4 +16,6 @@ public interface CustomerRepository extends JpaRepository<Customer, UUID>, JpaSp
     Optional<Customer> findByWhatsappNumber(String whatsappNumber);
 
     boolean existsByDocument(String document);
+
+    boolean existsByWhatsappNumber(String whatsappNumber);
 }

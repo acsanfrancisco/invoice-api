@@ -17,7 +17,7 @@ public class UpdateCustomerDto {
     @Pattern(regexp = "^\\d{13}$")
     private String whatsappNumber;
 
-    @AssertTrue(message = "At least one field must be informed")
+    @AssertTrue(message = "At least one field must be provided")
     public boolean isValid() {
         return fullName != null ||  whatsappNumber != null;
     }

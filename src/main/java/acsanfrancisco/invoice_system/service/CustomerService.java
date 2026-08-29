@@ -41,6 +41,9 @@ public class CustomerService {
         Customer customer = customerRepository
                 .findById(id)
                 .orElseThrow(() -> new CustomerNotFoundException("Customer not found. Id: " + id));
+        if(customer.getIsActive() == false){
+            throw new CustomerIsNotActiveException("Must inform a active customer to update. ID: " + id);
+        }
 
         if(dto.getFullName() != null){
             customer.setFullName(dto.getFullName());
