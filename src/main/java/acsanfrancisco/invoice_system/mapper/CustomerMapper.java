@@ -2,10 +2,8 @@ package acsanfrancisco.invoice_system.mapper;
 
 import acsanfrancisco.invoice_system.dto.CreateCustomerDto;
 import acsanfrancisco.invoice_system.dto.CustomerResponseDto;
-import acsanfrancisco.invoice_system.dto.UpdateCustomerDto;
 import acsanfrancisco.invoice_system.entity.Customer;
 import acsanfrancisco.invoice_system.entity.enums.DocumentType;
-import java.util.List;
 
 public class CustomerMapper {
 
@@ -26,14 +24,5 @@ public class CustomerMapper {
         dto.setDocument(customer.getDocument());
         dto.setWhatsappNumber(customer.getWhatsappNumber());
         return dto;
-    }
-
-    public static List<CustomerResponseDto> listToDto(List<Customer> customers) {
-        return customers.stream().map(CustomerMapper::toDto).toList();
-    }
-
-    public static void updateToEntity(UpdateCustomerDto dto, Customer customer) {
-        customer.setFullName(dto.getFullName());
-        customer.setWhatsappNumber(String.valueOf(dto.getWhatsappNumber()));
     }
 }

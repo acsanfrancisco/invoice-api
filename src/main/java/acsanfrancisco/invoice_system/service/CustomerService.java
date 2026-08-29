@@ -41,7 +41,15 @@ public class CustomerService {
         Customer customer = customerRepository
                 .findById(id)
                 .orElseThrow(() -> new CustomerNotFoundException("Customer not found. Id: " + id));
-        CustomerMapper.updateToEntity(dto, customer);
+
+        if(dto.getFullName() != null){
+            customer.setFullName(dto.getFullName());
+        }
+
+        if(dto.getWhatsappNumber() != null){
+            customer.setWhatsappNumber(dto.getWhatsappNumber());
+        }
+
         return CustomerMapper
                 .toDto(customerRepository.save(customer));
     }
