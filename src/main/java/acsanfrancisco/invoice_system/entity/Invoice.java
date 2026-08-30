@@ -42,6 +42,9 @@ public class Invoice {
     @Column(name = "net_value", nullable = false)
     private BigDecimal netValue;
 
+    @Column(name = "yet_to_pay")
+    private BigDecimal yetToPay;
+
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private InvoiceStatus status;
