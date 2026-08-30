@@ -93,13 +93,13 @@ public class PaymentService {
     }
 
     @Transactional(readOnly = true)
-    public List<PaymentResponseDto> findPaymentsByCustomerIdGreaterThan(UUID id, BigDecimal amount) {
+    public List<PaymentResponseDto> findPaymentsByCustomerIdEqualOrGreaterThan(UUID id, BigDecimal amount) {
         if(!customerRepository.existsById(id)) {
             throw new InvalidCustomerException("Customer not found. ID: " + id);
         }
 
         return paymentRepository
-                .findPaymentsByCustomerIdGreaterThan(id ,amount)
+                .findPaymentsByCustomerIdEqualOrGreaterThan(id ,amount)
                 .stream().map(PaymentMapper::toDto).toList();
     }
 }

@@ -28,6 +28,6 @@ public interface PaymentRepository extends JpaRepository<Payment, UUID> {
     List<Payment> findPaymentsGreaterThan(@Param("amount") BigDecimal amount);
 
     @Query("SELECT p from Payment p WHERE p.invoice.customer.id = :customerId AND p.amount >= :amount")
-    List<Payment> findPaymentsByCustomerIdGreaterThan(@Param("customerId") UUID customerId, @Param("amount")BigDecimal amount);
+    List<Payment> findPaymentsByCustomerIdEqualOrGreaterThan(@Param("customerId") UUID customerId, @Param("amount")BigDecimal amount);
 
 }
