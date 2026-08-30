@@ -5,9 +5,8 @@ import acsanfrancisco.invoice_system.dto.CustomerResponseDto;
 import acsanfrancisco.invoice_system.dto.UpdateCustomerDto;
 import acsanfrancisco.invoice_system.entity.Customer;
 import acsanfrancisco.invoice_system.entity.enums.DocumentType;
-import acsanfrancisco.invoice_system.exception.CustomerIsNotActiveException;
-import acsanfrancisco.invoice_system.exception.CustomerNotFoundException;
-import acsanfrancisco.invoice_system.exception.DocumentAlreadyRegisteredException;
+import acsanfrancisco.invoice_system.exception.InvalidCustomerException;
+import acsanfrancisco.invoice_system.exception.InvalidInvoiceException;
 import acsanfrancisco.invoice_system.mapper.CustomerMapper;
 import acsanfrancisco.invoice_system.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +28,7 @@ public class CustomerService {
     @Transactional
     public CustomerResponseDto createCustomer(CreateCustomerDto dto) {
         if(customerRepository.existsByDocument(dto.getDocument())){
-            throw new DocumentAlreadyRegisteredException("Document already exists. Document: " + dto.getDocument());
+            throw new InvalidCustomerException("Document already exists. Document: " + dto.getDocument());
         }
         Customer customer = CustomerMapper.toEntity(dto);
         return CustomerMapper
@@ -40,9 +39,9 @@ public class CustomerService {
     public CustomerResponseDto updateCustomer(UpdateCustomerDto dto, UUID id) {
         Customer customer = customerRepository
                 .findById(id)
-                .orElseThrow(() -> new CustomerNotFoundException("Customer not found. Id: " + id));
+                .orElseThrow(() -> new InvalidInvoiceException("Customer not found. Id: " + id));
         if(customer.getIsActive() == false){
-            throw new CustomerIsNotActiveException("Must inform a active customer to update. ID: " + id);
+            throw new InvalidCustomerException("Must inform a active customer to update. ID: " + id);
         }
 
         if(dto.getFullName() != null){
@@ -61,7 +60,7 @@ public class CustomerService {
     public void deleteCustomer(UUID id) {
         Customer customer = customerRepository
                 .findById(id)
-                .orElseThrow(() -> new CustomerNotFoundException("Customer not found. Id: " + id));
+                .orElseThrow(() -> new InvalidCustomerException("Customer not found. Id: " + id));
         customerRepository.delete(customer);
     }
 
@@ -69,9 +68,9 @@ public class CustomerService {
     public void safeDeleteCustomer(UUID id) {
         Customer customer = customerRepository
                 .findById(id)
-                .orElseThrow(() -> new CustomerNotFoundException("Customer not found. Id: " + id));
+                .orElseThrow(() -> new InvalidCustomerException("Customer not found. Id: " + id));
         if(!customer.getIsActive()){
-            throw new CustomerIsNotActiveException("Customer is already not active.");
+            throw new InvalidCustomerException("Customer is already not active.");
         }
         customer.setIsActive(false);
         customerRepository.save(customer);
@@ -81,7 +80,7 @@ public class CustomerService {
     public CustomerResponseDto findCustomerById(UUID id){
         Customer customer = customerRepository
                 .findById(id)
-                .orElseThrow(()-> new CustomerNotFoundException("Customer not found. Id: " + id));
+                .orElseThrow(()-> new InvalidCustomerException("Customer not found. Id: " + id));
         return CustomerMapper.toDto(customer);
     }
 
@@ -89,7 +88,7 @@ public class CustomerService {
     public CustomerResponseDto findCustomerByDocument(String document){
         Customer customer = customerRepository
                 .findByDocument(document)
-                .orElseThrow(()-> new CustomerNotFoundException("Customer not found. Document: " + document));
+                .orElseThrow(()-> new InvalidCustomerException("Customer not found. Document: " + document));
         return CustomerMapper.toDto(customer);
     }
 
@@ -97,7 +96,7 @@ public class CustomerService {
     public CustomerResponseDto findCustomerByWhatsappNumber(String whatsappNumber){
         Customer customer = customerRepository
                 .findByWhatsappNumber(whatsappNumber)
-                .orElseThrow(() -> new CustomerNotFoundException("Customer not found. Whatsapp number: " + whatsappNumber));
+                .orElseThrow(() -> new InvalidCustomerException("Customer not found. Whatsapp number: " + whatsappNumber));
         return CustomerMapper.toDto(customer);
     }
 
