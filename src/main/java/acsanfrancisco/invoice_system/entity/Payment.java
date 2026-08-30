@@ -25,7 +25,7 @@ public class Payment {
 
     @Column(name = "payment_date", nullable = false)
     @CreatedDate
-    private Instant paymentDate;
+    private LocalDate paymentDate;
 
     @Column(name = "amount", nullable = false)
     private BigDecimal amount;
