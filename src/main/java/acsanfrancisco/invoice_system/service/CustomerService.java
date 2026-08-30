@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.UUID;
 
-import static acsanfrancisco.invoice_system.entity.specification.CustomerSpecifications.*;
+import static acsanfrancisco.invoice_system.entity.specification.CustomerSpecification.*;
 
 @Service
 @RequiredArgsConstructor
