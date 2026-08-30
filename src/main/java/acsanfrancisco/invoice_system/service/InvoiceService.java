@@ -6,17 +6,24 @@ import acsanfrancisco.invoice_system.dto.UpdateInvoiceDto;
 import acsanfrancisco.invoice_system.entity.Customer;
 import acsanfrancisco.invoice_system.entity.Invoice;
 import acsanfrancisco.invoice_system.entity.enums.InvoiceStatus;
-import acsanfrancisco.invoice_system.exception.*;
+import acsanfrancisco.invoice_system.exception.InvalidCustomerException;
+import acsanfrancisco.invoice_system.exception.InvalidInvoiceException;
 import acsanfrancisco.invoice_system.mapper.InvoiceMapper;
 import acsanfrancisco.invoice_system.repository.CustomerRepository;
 import acsanfrancisco.invoice_system.repository.InvoiceRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+
+import static acsanfrancisco.invoice_system.entity.specification.InvoiceSpecification.*;
 
 @Service
 @RequiredArgsConstructor
@@ -114,5 +121,56 @@ public class InvoiceService {
 
         List<Invoice> invoices = invoiceRepository.findInvoiceByCustomerWhatsappNumber(whatsappNumber);
         return invoices.stream().map(InvoiceMapper::toDto).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<InvoiceResponseDto> findInvoicesByGrossValueGreaterOrEqualTo(BigDecimal grossValue){
+        return invoiceRepository.findInvoicesByGrossValueGreaterOrEqualTo(grossValue)
+                .stream().map(InvoiceMapper::toDto).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<InvoiceResponseDto> findInvoicesByGrossValueLessThanOrEqualTo(BigDecimal grossValue){
+        return invoiceRepository.findInvoiceByGrossValueLessThanOrEqualTo(grossValue)
+                .stream().map(InvoiceMapper::toDto).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<InvoiceResponseDto> findInvoicesByNetValueGreaterThanOrEqualTo(BigDecimal netValue){
+        return invoiceRepository.findInvoicesByNetValueGreaterThanOrEqualTo(netValue)
+                .stream().map(InvoiceMapper::toDto).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<InvoiceResponseDto> findInvoicesByNetValueLessThanOrEqualTo(BigDecimal netValue){
+        return invoiceRepository.findInvoicesByNetValueLessThanOrEqualTo(netValue)
+                .stream().map(InvoiceMapper::toDto).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<InvoiceResponseDto> findInvoicesByYetToPayGreaterThanOrEqualTo(BigDecimal yetToPay){
+        return invoiceRepository.findInvoicesByYetToPayGreaterThanOrEqualTo(yetToPay)
+                .stream().map(InvoiceMapper::toDto).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<InvoiceResponseDto> findInvoicesByYetToPayLessThanOrEqualTo(BigDecimal yetToPay){
+        return invoiceRepository.findInvoicesByYetToPayLessThanOrEqualTo(yetToPay)
+                .stream().map(InvoiceMapper::toDto).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public Page<InvoiceResponseDto> search(UUID id, UUID customerId, BigDecimal grossValue,
+                                           BigDecimal netValue, BigDecimal yetToPay, InvoiceStatus status,
+                                           LocalDate dueDate, LocalDate firstDate, LocalDate lastDate,
+                                           Pageable pageable){
+        Specification<Invoice> specification = Specification.allOf(
+                invoiceIdEquals(id),
+                customerIdEquals(customerId),
+                statusEquals(status),
+                issuedAtBetween(firstDate, lastDate),
+                dueDateEquals(dueDate),
+                dueDateBetween(firstDate, lastDate));
+        return invoiceRepository.findAll(specification, pageable).map(InvoiceMapper::toDto);
     }
 }
