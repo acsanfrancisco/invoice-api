@@ -21,7 +21,7 @@ public interface InvoiceRepository extends JpaRepository<Invoice, UUID>, JpaSpec
     List<Invoice> findInvoiceByCustomerWhatsappNumber(@Param("whatsappNumber") String whatsappNumber);
 
     @Query("SELECT i from Invoice i WHERE i.grossValue >= :grossValue")
-    List<Invoice> findInvoicesByGrossValueGreaterOrEqualTo(@Param("grossValue") BigDecimal grossValue);
+    List<Invoice> findInvoicesByGrossValueGreaterThanOrEqualTo(@Param("grossValue") BigDecimal grossValue);
 
     @Query("SELECT i from Invoice i WHERE i.grossValue <= :grossValue")
     List<Invoice> findInvoiceByGrossValueLessThanOrEqualTo(@Param("grossValue") BigDecimal grossValue);

@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -124,8 +123,8 @@ public class InvoiceService {
     }
 
     @Transactional(readOnly = true)
-    public List<InvoiceResponseDto> findInvoicesByGrossValueGreaterOrEqualTo(BigDecimal grossValue){
-        return invoiceRepository.findInvoicesByGrossValueGreaterOrEqualTo(grossValue)
+    public List<InvoiceResponseDto> findInvoicesByGrossValueGreaterThanOrEqualTo(BigDecimal grossValue){
+        return invoiceRepository.findInvoicesByGrossValueGreaterThanOrEqualTo(grossValue)
                 .stream().map(InvoiceMapper::toDto).toList();
     }
 
