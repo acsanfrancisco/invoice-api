@@ -132,5 +132,4 @@ public class InvoiceController {
                 .status(HttpStatus.OK)
                 .body(invoiceService.search(id, customerId, grossValue, netValue, yetToPay, status, dueDate, firstDate, lastDate, pageable));
     }
-
 }

@@ -5,6 +5,7 @@ import acsanfrancisco.invoice_system.dto.PaymentResponseDto;
 import acsanfrancisco.invoice_system.entity.Invoice;
 import acsanfrancisco.invoice_system.entity.Payment;
 import acsanfrancisco.invoice_system.entity.enums.InvoiceStatus;
+import acsanfrancisco.invoice_system.entity.enums.PaymentMethod;
 import acsanfrancisco.invoice_system.exception.InvalidCustomerException;
 import acsanfrancisco.invoice_system.exception.InvalidInvoiceException;
 import acsanfrancisco.invoice_system.exception.InvalidPaymentException;
@@ -13,12 +14,17 @@ import acsanfrancisco.invoice_system.repository.CustomerRepository;
 import acsanfrancisco.invoice_system.repository.InvoiceRepository;
 import acsanfrancisco.invoice_system.repository.PaymentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
+
+import static acsanfrancisco.invoice_system.entity.specification.PaymentSpecification.*;
 
 @Service
 @RequiredArgsConstructor
@@ -101,5 +107,17 @@ public class PaymentService {
         return paymentRepository
                 .findPaymentsByCustomerIdEqualOrGreaterThan(id ,amount)
                 .stream().map(PaymentMapper::toDto).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public Page<PaymentResponseDto> search(LocalDate paymentDate, BigDecimal amount,
+                                           PaymentMethod paymentMethod, UUID invoiceId,
+                                           Pageable pageable) {
+        Specification<Payment> specification = Specification.allOf(
+                paymentDateEquals(paymentDate),
+                amountEquals(amount),
+                paymentMethodEquals(paymentMethod),
+                invoiceIdEquals(invoiceId));
+        return paymentRepository.findAll(specification, pageable).map(PaymentMapper::toDto);
     }
 }

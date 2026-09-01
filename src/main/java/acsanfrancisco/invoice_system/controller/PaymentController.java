@@ -2,8 +2,12 @@ package acsanfrancisco.invoice_system.controller;
 
 import acsanfrancisco.invoice_system.dto.CreatePaymentDto;
 import acsanfrancisco.invoice_system.dto.PaymentResponseDto;
+import acsanfrancisco.invoice_system.entity.enums.PaymentMethod;
 import acsanfrancisco.invoice_system.service.PaymentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -60,5 +64,18 @@ public class PaymentController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(paymentService.findPaymentsByCustomerIdEqualOrGreaterThan(customerId, amount));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Page<PaymentResponseDto>> search(
+            @RequestParam(value = "paymentDate", required = false) LocalDate paymentDate,
+            @RequestParam(value = "amount", required = false) BigDecimal amount,
+            @RequestParam(value = "paymentMethod", required = false) PaymentMethod paymentMethod,
+            @RequestParam(value = "invoiceId", required = false) UUID invoiceId,
+            @PageableDefault(page = 0, size = 10) Pageable pageable ) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(paymentService.search(paymentDate, amount, paymentMethod, invoiceId, pageable));
+
     }
 }

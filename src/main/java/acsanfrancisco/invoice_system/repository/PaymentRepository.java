@@ -2,15 +2,15 @@ package acsanfrancisco.invoice_system.repository;
 
 import acsanfrancisco.invoice_system.entity.Payment;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-public interface PaymentRepository extends JpaRepository<Payment, UUID> {
+public interface PaymentRepository extends JpaRepository<Payment, UUID>, JpaSpecificationExecutor<Payment> {
 
     @Query("SELECT p FROM Payment p WHERE p.invoice.id = :id")
     List<Payment> findPaymentsByInvoiceId(@Param("id") UUID id);
