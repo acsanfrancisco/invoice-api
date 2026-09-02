@@ -37,6 +37,13 @@ public class PaymentController {
                 .body(paymentService.findPaymentsByInvoiceId(invoiceId));
     }
 
+    @GetMapping(params = "customerId")
+    public ResponseEntity<List<PaymentResponseDto>> findPaymentsByCustomerId(@RequestParam("customerId") UUID customerId){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(paymentService.findPaymentsByCustomerId(customerId));
+    }
+
     @GetMapping(params = "paymentDate")
     public ResponseEntity<List<PaymentResponseDto>> findPaymentsByPaymentDate(@RequestParam("paymentDate") LocalDate paymentDate) {
         return ResponseEntity
