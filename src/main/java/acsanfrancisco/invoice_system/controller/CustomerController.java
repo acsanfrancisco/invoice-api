@@ -45,8 +45,8 @@ public class CustomerController {
     }
 
     @PatchMapping("/deactivate/{id}")
-    public ResponseEntity<Void> safeDeleteCustomer(@PathVariable UUID id) {
-        customerService.safeDeleteCustomer(id);
+    public ResponseEntity<Void> deactivateCustomer(@PathVariable UUID id) {
+        customerService.deactivateCustomer(id);
         return ResponseEntity
                 .noContent()
                 .build();

@@ -65,7 +65,7 @@ public class CustomerService {
     }
 
     @Transactional
-    public void safeDeleteCustomer(UUID id) {
+    public void deactivateCustomer(UUID id) {
         Customer customer = customerRepository
                 .findById(id)
                 .orElseThrow(() -> new InvalidCustomerException("Customer not found. Id: " + id));
