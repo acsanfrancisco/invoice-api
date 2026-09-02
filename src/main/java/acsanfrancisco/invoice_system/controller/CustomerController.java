@@ -52,6 +52,12 @@ public class CustomerController {
                 .build();
     }
 
+    @PatchMapping("/activate/{id}")
+    public ResponseEntity<Void> activeCustomer(@PathVariable UUID id) {
+        customerService.activateCustomer(id);
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<CustomerResponseDto> findCustomerById(@PathVariable UUID id) {
         return ResponseEntity

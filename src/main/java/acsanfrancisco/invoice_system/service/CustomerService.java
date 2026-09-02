@@ -76,6 +76,18 @@ public class CustomerService {
         customerRepository.save(customer);
     }
 
+    @Transactional
+    public void activateCustomer(UUID id) {
+        Customer customer = customerRepository
+                .findById(id)
+                .orElseThrow(() -> new InvalidCustomerException("Customer not found. Id: " + id));
+        if(customer.getIsActive()){
+            throw new InvalidCustomerException("Customer is already active.");
+        }
+        customer.setIsActive(true);
+        customerRepository.save(customer);
+    }
+
     @Transactional(readOnly = true)
     public CustomerResponseDto findCustomerById(UUID id){
         Customer customer = customerRepository
