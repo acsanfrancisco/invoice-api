@@ -36,9 +36,6 @@ public class InvoiceService {
     public InvoiceResponseDto createInvoice (CreateInvoiceDto dto){
         Customer customer = customerRepository.findById(dto.getCustomer_id())
                 .orElseThrow(()->new InvalidInvoiceException("Customer not found. ID: " + dto.getCustomer_id()));
-        if(customer.getIsActive() == false){
-            throw new InvalidCustomerException("Customer is not active. ID: " + dto.getCustomer_id());
-        }
 
         Invoice invoice = InvoiceMapper.toEntity(dto, customer);
         LocalDate dueDate = invoice.getIssuedAt().plusDays(DAYS_TO_DUE_DATE).toLocalDate();
@@ -47,6 +44,10 @@ public class InvoiceService {
         invoice.setNetValue(netValue);
         invoice.setStatus(InvoiceStatus.OPEN);
         invoice.setYetToPay(invoice.getNetValue());
+        if(customer.getIsActive() == false){
+            customer.setIsActive(true);
+        }
+
         return InvoiceMapper
                 .toDto(invoiceRepository.save(invoice));
     }
