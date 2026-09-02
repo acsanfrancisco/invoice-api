@@ -13,7 +13,7 @@ public interface CustomerRepository extends JpaRepository<Customer, UUID>, JpaSp
 
     Optional<Customer> findByDocument(String document);
 
-    Optional<Customer> findByWhatsappNumber(String whatsappNumber);
+    List<Customer> findByWhatsappNumber(String whatsappNumber);
 
     boolean existsByDocument(String document);
 

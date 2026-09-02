@@ -15,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 import java.util.UUID;
 
 import static acsanfrancisco.invoice_system.entity.specification.CustomerSpecification.*;
@@ -105,11 +107,10 @@ public class CustomerService {
     }
 
     @Transactional(readOnly = true)
-    public CustomerResponseDto findCustomerByWhatsappNumber(String whatsappNumber){
-        Customer customer = customerRepository
+    public List<CustomerResponseDto> findCustomerByWhatsappNumber(String whatsappNumber){
+        return customerRepository
                 .findByWhatsappNumber(whatsappNumber)
-                .orElseThrow(() -> new InvalidCustomerException("Customer not found. Whatsapp number: " + whatsappNumber));
-        return CustomerMapper.toDto(customer);
+                .stream().map(CustomerMapper::toDto).toList();
     }
 
     @Transactional(readOnly = true)

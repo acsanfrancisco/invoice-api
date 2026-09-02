@@ -13,6 +13,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -73,7 +75,7 @@ public class CustomerController {
     }
 
     @GetMapping(params = "whatsappNumber")
-    public ResponseEntity<CustomerResponseDto> findCustomerByWhatsappNumber(@RequestParam String whatsappNumber) {
+    public ResponseEntity<List<CustomerResponseDto>> findCustomerByWhatsappNumber(@RequestParam String whatsappNumber) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(customerService.findCustomerByWhatsappNumber(whatsappNumber));
