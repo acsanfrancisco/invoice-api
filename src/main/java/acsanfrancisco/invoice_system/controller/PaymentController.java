@@ -38,8 +38,8 @@ public class PaymentController {
                 .body(paymentService.findPaymentsByInvoiceId(invoiceId));
     }
 
-    @GetMapping(params = "customerId")
-    public ResponseEntity<List<PaymentResponseDto>> findPaymentsByCustomerId(@RequestParam("customerId") UUID customerId){
+    @GetMapping("/customers/{customerId}")
+    public ResponseEntity<List<PaymentResponseDto>> findPaymentsByCustomerId(@PathVariable UUID customerId){
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(paymentService.findPaymentsByCustomerId(customerId));
