@@ -39,8 +39,9 @@ public class PaymentService {
         Invoice invoice = invoiceRepository.findById(dto.getInvoice())
                 .orElseThrow(()-> new InvalidInvoiceException("Invoice not found. ID: " + dto.getInvoice()));
 
-        if(invoice.getStatus().equals(InvoiceStatus.PAID) ||  invoice.getStatus().equals(InvoiceStatus.CANCELLED)) {
-            throw new InvalidPaymentException("Invoice status must not be paid or cancelled");
+        if(invoice.getStatus() == (InvoiceStatus.PAID) ||
+                invoice.getStatus() == (InvoiceStatus.CANCELLED)) {
+            throw new InvalidPaymentException("Impossible to create a payment for invoice with status " + invoice.getStatus() + ". ID: " + dto.getInvoice());
         }
 
         if(dto.getAmount().compareTo(invoice.getYetToPay()) > 0){
