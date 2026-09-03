@@ -4,6 +4,7 @@ import acsanfrancisco.invoice_system.dto.CreatePaymentDto;
 import acsanfrancisco.invoice_system.dto.PaymentResponseDto;
 import acsanfrancisco.invoice_system.entity.enums.PaymentMethod;
 import acsanfrancisco.invoice_system.service.PaymentService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +25,7 @@ public class PaymentController {
     private final PaymentService paymentService;
 
     @PostMapping
-    public ResponseEntity<PaymentResponseDto> createPayment(@RequestBody CreatePaymentDto createPaymentDto) {
+    public ResponseEntity<PaymentResponseDto> createPayment(@RequestBody @Valid CreatePaymentDto createPaymentDto) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(paymentService.createPayment(createPaymentDto));
