@@ -22,6 +22,7 @@ public class PaymentMapper {
         dto.setPaymentDate(payment.getPaymentDate());
         dto.setAmount(payment.getAmount());
         dto.setPaymentMethod(payment.getPaymentMethod());
+        dto.setInvoiceId(payment.getInvoice().getId());
         return dto;
     }
 }
