@@ -22,6 +22,6 @@ public class CreateInvoiceDto {
     private String note;
 
     @NotNull(message = "Must inform customer ID")
-    private UUID customer_id;
+    private UUID customerId;
 
 }

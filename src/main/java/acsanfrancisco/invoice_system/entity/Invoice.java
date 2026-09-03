@@ -27,7 +27,6 @@ public class Invoice {
     private UUID id;
 
     @Column(name = "issued_at", nullable = false)
-    @CreatedDate
     private LocalDateTime issuedAt;
 
     @Column(name = "due_date", nullable = false)

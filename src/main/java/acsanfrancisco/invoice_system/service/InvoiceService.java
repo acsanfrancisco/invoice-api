@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,10 +35,13 @@ public class InvoiceService {
 
     @Transactional
     public InvoiceResponseDto createInvoice (CreateInvoiceDto dto){
-        Customer customer = customerRepository.findById(dto.getCustomer_id())
-                .orElseThrow(()->new InvalidInvoiceException("Customer not found. ID: " + dto.getCustomer_id()));
+        Customer customer = customerRepository.findById(dto.getCustomerId())
+                .orElseThrow(()->new InvalidInvoiceException("Customer not found. ID: " + dto.getCustomerId()));
 
         Invoice invoice = InvoiceMapper.toEntity(dto, customer);
+
+        LocalDateTime now =  LocalDateTime.now();
+        invoice.setIssuedAt(now);
         LocalDate dueDate = invoice.getIssuedAt().plusDays(DAYS_TO_DUE_DATE).toLocalDate();
         BigDecimal netValue = invoice.getGrossValue().subtract(dto.getDiscount());
         invoice.setDueDate(dueDate);
@@ -56,8 +60,11 @@ public class InvoiceService {
     public InvoiceResponseDto updateInvoice(UpdateInvoiceDto dto){
         Invoice invoice = invoiceRepository.findById(dto.getId())
                 .orElseThrow(()->new InvalidInvoiceException("Invoice not found for ID: " + dto.getId()));
-        if(invoice.getStatus() == InvoiceStatus.CANCELLED){
-            throw new InvalidInvoiceException("Invoice is set cancelled. ID: " + invoice.getId());
+
+        if(invoice.getStatus() == InvoiceStatus.CANCELLED ||
+            invoice.getStatus() == InvoiceStatus.PARTIALLY_PAID ||
+            invoice.getStatus() == InvoiceStatus.PAID){
+            throw new InvalidInvoiceException("Impossible to update an invoice with status: " + invoice.getStatus() + ". ID: " + dto.getId());
         }
 
         if(dto.getCustomerId() != null){

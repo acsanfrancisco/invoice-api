@@ -57,7 +57,6 @@ public class InvoiceController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(invoiceService.findInvoicesByCustomerId(customerId));
-
     }
 
     @GetMapping(value = "/customers", params = "document")
