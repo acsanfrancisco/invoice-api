@@ -51,7 +51,10 @@ public class Invoice {
     @Column(name = "note")
     private String note;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(name = "last_message_sent_at")
+    private LocalDate lastMessageSentAt;
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
