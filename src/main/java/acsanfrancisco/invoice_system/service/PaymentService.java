@@ -24,7 +24,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-import static acsanfrancisco.invoice_system.entity.specification.PaymentSpecification.*;
+import static acsanfrancisco.invoice_system.specification.PaymentSpecification.*;
 
 @Service
 @RequiredArgsConstructor
