@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import static acsanfrancisco.invoice_system.entity.specification.InvoiceSpecification.*;
+import static acsanfrancisco.invoice_system.specification.InvoiceSpecification.*;
 
 @Service
 @RequiredArgsConstructor
@@ -180,4 +180,21 @@ public class InvoiceService {
                 dueDateBetween(firstDate, lastDate));
         return invoiceRepository.findAll(specification, pageable).map(InvoiceMapper::toDto);
     }
+
+    @Transactional
+    public void setInvoiceStatusToOverdue(){
+        invoiceRepository.setInvoiceStatusToOverdue(LocalDate.now(), InvoiceStatus.OVERDUE, InvoiceStatus.OPEN);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Invoice> findInvoicesByStatus(InvoiceStatus status){
+        return invoiceRepository.findInvoicesByStatus(status);
+    }
+
+    @Transactional
+    public void updateLastMessageSentAt(Invoice invoice){
+        invoice.setLastMessageSentAt(LocalDate.now());
+        invoiceRepository.save(invoice);
+    }
+
 }
