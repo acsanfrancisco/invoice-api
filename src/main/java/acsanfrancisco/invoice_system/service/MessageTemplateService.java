@@ -30,7 +30,8 @@ public class MessageTemplateService {
                 .replace("{{grossValue}}", formatCurrency(invoice.getGrossValue()))
                 .replace("{{dueDate}}", invoice.getDueDate().format(DATE_FORMATTER))
                 .replace("{{netValue}}", formatCurrency(invoice.getNetValue()))
-                .replace("{{discount}}", formatCurrency(invoice.getDiscount()));
+                .replace("{{discount}}", formatCurrency(invoice.getDiscount()))
+                .replace("{{yetToPay}}", formatCurrency(invoice.getYetToPay()));
     }
 
     private String formatCurrency(BigDecimal amount) {
