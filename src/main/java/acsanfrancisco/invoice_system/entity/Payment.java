@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -24,7 +23,6 @@ public class Payment {
     private UUID id;
 
     @Column(name = "payment_date", nullable = false)
-    @CreatedDate
     private LocalDate paymentDate;
 
     @Column(name = "amount", nullable = false)
