@@ -131,53 +131,20 @@ public class InvoiceService {
     }
 
     @Transactional(readOnly = true)
-    public List<InvoiceResponseDto> findInvoicesByGrossValueGreaterThanOrEqualTo(BigDecimal grossValue){
-        return invoiceRepository.findInvoicesByGrossValueGreaterThanOrEqualTo(grossValue)
-                .stream().map(InvoiceMapper::toDto).toList();
-    }
-
-    @Transactional(readOnly = true)
-    public List<InvoiceResponseDto> findInvoicesByGrossValueLessThanOrEqualTo(BigDecimal grossValue){
-        return invoiceRepository.findInvoiceByGrossValueLessThanOrEqualTo(grossValue)
-                .stream().map(InvoiceMapper::toDto).toList();
-    }
-
-    @Transactional(readOnly = true)
-    public List<InvoiceResponseDto> findInvoicesByNetValueGreaterThanOrEqualTo(BigDecimal netValue){
-        return invoiceRepository.findInvoicesByNetValueGreaterThanOrEqualTo(netValue)
-                .stream().map(InvoiceMapper::toDto).toList();
-    }
-
-    @Transactional(readOnly = true)
-    public List<InvoiceResponseDto> findInvoicesByNetValueLessThanOrEqualTo(BigDecimal netValue){
-        return invoiceRepository.findInvoicesByNetValueLessThanOrEqualTo(netValue)
-                .stream().map(InvoiceMapper::toDto).toList();
-    }
-
-    @Transactional(readOnly = true)
-    public List<InvoiceResponseDto> findInvoicesByYetToPayGreaterThanOrEqualTo(BigDecimal yetToPay){
-        return invoiceRepository.findInvoicesByYetToPayGreaterThanOrEqualTo(yetToPay)
-                .stream().map(InvoiceMapper::toDto).toList();
-    }
-
-    @Transactional(readOnly = true)
-    public List<InvoiceResponseDto> findInvoicesByYetToPayLessThanOrEqualTo(BigDecimal yetToPay){
-        return invoiceRepository.findInvoicesByYetToPayLessThanOrEqualTo(yetToPay)
-                .stream().map(InvoiceMapper::toDto).toList();
-    }
-
-    @Transactional(readOnly = true)
-    public Page<InvoiceResponseDto> search(UUID id, UUID customerId, BigDecimal grossValue,
-                                           BigDecimal netValue, BigDecimal yetToPay, InvoiceStatus status,
-                                           LocalDate dueDate, LocalDate firstDate, LocalDate lastDate,
+    public Page<InvoiceResponseDto> search(UUID id, UUID customerId, InvoiceStatus status, LocalDate dueDate,
+                                           BigDecimal grossValueFrom, BigDecimal grossValueUntil,
+                                           BigDecimal netValueFrom, BigDecimal netValueUntil,
+                                           BigDecimal yetToPayFrom, BigDecimal yetToPayUntil,
+                                           LocalDate issuedAtFrom, LocalDate issuedAtUntil,
+                                           LocalDate dueDateFrom, LocalDate dueDateUntil,
                                            Pageable pageable){
         Specification<Invoice> specification = Specification.allOf(
-                invoiceIdEquals(id),
-                customerIdEquals(customerId),
-                statusEquals(status),
-                issuedAtBetween(firstDate, lastDate),
-                dueDateEquals(dueDate),
-                dueDateBetween(firstDate, lastDate));
+                invoiceIdEquals(id), customerIdEquals(customerId), statusEquals(status), dueDateEquals(dueDate),
+                grossValueFrom(grossValueFrom), grossValueUntil(grossValueUntil),
+                netValueFrom(netValueFrom), netValueUntil(netValueUntil),
+                yetToPayFrom(yetToPayFrom), yetToPayUntil(yetToPayUntil),
+                issuedAtFrom(issuedAtFrom), issuedAtUntil(issuedAtUntil),
+                dueDateFrom(dueDateFrom), dueDateUntil(dueDateUntil));
         return invoiceRepository.findAll(specification, pageable).map(InvoiceMapper::toDto);
     }
 

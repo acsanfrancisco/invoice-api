@@ -73,62 +73,31 @@ public class InvoiceController {
                 .body(invoiceService.findInvoiceByCustomerWhatsappNumber(whatsappNumber));
     }
 
-    @GetMapping(value = "/gross-value/greater-than-or-equal", params = "grossValue")
-    public ResponseEntity<List<InvoiceResponseDto>> findInvoicesByGrossValueGreaterThanOrEqualTo(@RequestParam("grossValue") BigDecimal grossValue){
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(invoiceService.findInvoicesByGrossValueGreaterThanOrEqualTo(grossValue));
-    }
-
-    @GetMapping(value = "/gross-value/less-than-or-equal", params = "grossValue")
-    public ResponseEntity<List<InvoiceResponseDto>> findInvoicesByGrossValueLessThanOrEqualTo(@RequestParam("grossValue") BigDecimal grossValue){
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(invoiceService.findInvoicesByGrossValueLessThanOrEqualTo(grossValue));
-    }
-
-    @GetMapping(value = "/net-value/greater-than-or-equal", params = "netValue")
-    public ResponseEntity<List<InvoiceResponseDto>> findInvoicesByNetValueGreaterThanOrEqualTo(@RequestParam("netValue") BigDecimal netValue){
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(invoiceService.findInvoicesByNetValueGreaterThanOrEqualTo(netValue));
-    }
-
-    @GetMapping(value = "/net-value/less-than-or-equal", params = "netValue")
-    public ResponseEntity<List<InvoiceResponseDto>> findInvoicesByNetValueLessThanOrEqualTo(@RequestParam("netValue") BigDecimal netValue){
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(invoiceService.findInvoicesByNetValueLessThanOrEqualTo(netValue));
-    }
-
-    @GetMapping(value = "/yet-to-pay/greater-than-or-equal", params = "yetToPay")
-    public ResponseEntity<List<InvoiceResponseDto>> findInvoicesByYetToPayGreaterThanOrEqualTo(@RequestParam("yetToPay") BigDecimal yetToPay){
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(invoiceService.findInvoicesByYetToPayGreaterThanOrEqualTo(yetToPay));
-    }
-
-    @GetMapping(value = "/yet-to-pay/less-than-or-equal", params = "yetToPay")
-    public ResponseEntity<List<InvoiceResponseDto>> findInvoicesByYetToPayLessThanOrEqualTo(@RequestParam("yetToPay") BigDecimal yetToPay){
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(invoiceService.findInvoicesByYetToPayLessThanOrEqualTo(yetToPay));
-    }
-
     @GetMapping("/search")
     public ResponseEntity<Page<InvoiceResponseDto>> search(
             @RequestParam(value = "id", required = false) UUID id,
             @RequestParam(value = "customerId", required = false ) UUID customerId,
-            @RequestParam(value = "grossValue", required = false ) BigDecimal grossValue,
-            @RequestParam(value = "netValue", required = false) BigDecimal netValue,
-            @RequestParam(value = "yetToPay", required = false) BigDecimal yetToPay,
-            @RequestParam(value = "status", required = false) InvoiceStatus status,
+            @RequestParam(value = "status", required = false ) InvoiceStatus status,
             @RequestParam(value = "dueDate", required = false) LocalDate dueDate,
-            @RequestParam(value = "firstDate", required = false) LocalDate firstDate,
-            @RequestParam(value = "lastDate", required = false) LocalDate lastDate,
+            @RequestParam(value = "grossValueFrom", required = false) BigDecimal grossValueFrom,
+            @RequestParam(value = "grossValueUntil", required = false) BigDecimal grossValueUntil,
+            @RequestParam(value = "netValueFrom", required = false) BigDecimal netValueFrom,
+            @RequestParam(value = "netValueUntil", required = false) BigDecimal netValueUntil,
+            @RequestParam(value = "yetToPayFrom", required = false) BigDecimal yetToPayFrom,
+            @RequestParam(value = "yetToPayUntil", required = false) BigDecimal yetToPayUntil,
+            @RequestParam(value = "issuedAtFrom", required = false) LocalDate issuedAtFrom,
+            @RequestParam(value = "issuedAtUntil", required = false) LocalDate issuedAtUntil,
+            @RequestParam(value = "dueDateFrom", required = false) LocalDate dueDateFrom,
+            @RequestParam(value = "dueDateUntil", required = false) LocalDate dueDateUntil,
             @PageableDefault(size = 10, page = 0) Pageable pageable){
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(invoiceService.search(id, customerId, grossValue, netValue, yetToPay, status, dueDate, firstDate, lastDate, pageable));
+                .body(invoiceService.search(id, customerId, status, dueDate
+                        , grossValueFrom, grossValueUntil,
+                        netValueFrom, netValueUntil,
+                        yetToPayFrom, yetToPayUntil,
+                        issuedAtFrom, issuedAtUntil,
+                        dueDateFrom, dueDateUntil,
+                        pageable));
     }
 }
