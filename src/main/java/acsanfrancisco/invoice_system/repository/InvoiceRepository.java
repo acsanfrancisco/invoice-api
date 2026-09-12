@@ -23,24 +23,6 @@ public interface InvoiceRepository extends JpaRepository<Invoice, UUID>, JpaSpec
     @Query("SELECT i from Invoice i WHERE i.customer.whatsappNumber = :whatsappNumber")
     List<Invoice> findInvoiceByCustomerWhatsappNumber(@Param("whatsappNumber") String whatsappNumber);
 
-    @Query("SELECT i from Invoice i WHERE i.grossValue >= :grossValue")
-    List<Invoice> findInvoicesByGrossValueGreaterThanOrEqualTo(@Param("grossValue") BigDecimal grossValue);
-
-    @Query("SELECT i from Invoice i WHERE i.grossValue <= :grossValue")
-    List<Invoice> findInvoiceByGrossValueLessThanOrEqualTo(@Param("grossValue") BigDecimal grossValue);
-
-    @Query("SELECT i from Invoice i WHERE i.netValue >= :netValue")
-    List<Invoice> findInvoicesByNetValueGreaterThanOrEqualTo(@Param("netValue") BigDecimal netValue);
-
-    @Query("SELECT i from Invoice i WHERE i.netValue <= :netValue")
-    List<Invoice> findInvoicesByNetValueLessThanOrEqualTo(@Param("netValue") BigDecimal netValue);
-
-    @Query("SELECT i from Invoice i WHERE i.yetToPay >= :yetToPay")
-    List<Invoice> findInvoicesByYetToPayGreaterThanOrEqualTo(@Param("yetToPay") BigDecimal yetToPay);
-
-    @Query("SELECT i from Invoice i WHERE i.yetToPay <= :yetToPay")
-    List<Invoice> findInvoicesByYetToPayLessThanOrEqualTo(@Param("yetToPay") BigDecimal yetToPay);
-
     @Modifying
     @Query("UPDATE Invoice i SET i.status = :status WHERE i.status = :currentStatus AND i.dueDate < :currentDate")
     void setInvoiceStatusToOverdue(@Param("currentDate") LocalDate currentDate,@Param("status") InvoiceStatus status,@Param("currentStatus") InvoiceStatus currentStatus);
