@@ -40,7 +40,7 @@ public class CustomerService {
     public CustomerResponseDto updateCustomer(UpdateCustomerDto dto, UUID id) {
         Customer customer = customerRepository
                 .findById(id)
-                .orElseThrow(() -> new InvalidInvoiceException("Customer not found. Id: " + id));
+                .orElseThrow(() -> new InvalidCustomerException("Customer not found. Id: " + id));
         if(customer.getIsActive() == false){
             throw new InvalidCustomerException("Must inform a active customer to update. ID: " + id);
         }
