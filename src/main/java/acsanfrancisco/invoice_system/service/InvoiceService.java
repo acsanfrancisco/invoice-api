@@ -38,6 +38,10 @@ public class InvoiceService {
         Customer customer = customerRepository.findById(dto.getCustomerId())
                 .orElseThrow(()->new InvalidInvoiceException("Customer not found. ID: " + dto.getCustomerId()));
 
+        if(!customer.getIsActive()){
+            throw new InvalidCustomerException("Customer is not active. ID: " + dto.getCustomerId());
+        }
+
         Invoice invoice = InvoiceMapper.toEntity(dto, customer);
 
         LocalDateTime now =  LocalDateTime.now();
@@ -48,10 +52,6 @@ public class InvoiceService {
         invoice.setNetValue(netValue);
         invoice.setStatus(InvoiceStatus.OPEN);
         invoice.setYetToPay(invoice.getNetValue());
-        if(customer.getIsActive() == false){
-            customer.setIsActive(true);
-        }
-
         return InvoiceMapper
                 .toDto(invoiceRepository.save(invoice));
     }
