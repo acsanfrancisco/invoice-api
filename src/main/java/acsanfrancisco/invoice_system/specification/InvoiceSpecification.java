@@ -69,7 +69,7 @@ public class InvoiceSpecification {
 
     public static Specification<Invoice> issuedAtUntil(LocalDate issuedAtUntil) {
         return(Root<Invoice> root, CriteriaQuery<?> query, CriteriaBuilder cb) -> issuedAtUntil == null ? null :
-                cb.lessThanOrEqualTo(root.get("issuedAt"), issuedAtUntil.atStartOfDay().atZone(ZoneId.systemDefault()));
+                cb.lessThan(root.get("issuedAt"), issuedAtUntil.plusDays(1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
     }
 
     public static Specification<Invoice> dueDateFrom(LocalDate dueDateFrom) {
