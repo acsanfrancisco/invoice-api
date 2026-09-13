@@ -9,6 +9,7 @@ import acsanfrancisco.invoice_system.entity.enums.PaymentMethod;
 import acsanfrancisco.invoice_system.exception.InvalidCustomerException;
 import acsanfrancisco.invoice_system.exception.InvalidInvoiceException;
 import acsanfrancisco.invoice_system.exception.InvalidPaymentException;
+import acsanfrancisco.invoice_system.exception.ResourceNotFoundException;
 import acsanfrancisco.invoice_system.mapper.PaymentMapper;
 import acsanfrancisco.invoice_system.repository.CustomerRepository;
 import acsanfrancisco.invoice_system.repository.InvoiceRepository;
@@ -37,7 +38,7 @@ public class PaymentService {
     @Transactional
     public PaymentResponseDto createPayment(CreatePaymentDto dto) {
         Invoice invoice = invoiceRepository.findById(dto.getInvoice())
-                .orElseThrow(()-> new InvalidInvoiceException("Invoice not found. ID: " + dto.getInvoice()));
+                .orElseThrow(()-> new ResourceNotFoundException("Invoice not found. ID: " + dto.getInvoice()));
 
         if(invoice.getStatus() == (InvoiceStatus.PAID) ||
                 invoice.getStatus() == (InvoiceStatus.CANCELLED)) {
@@ -61,6 +62,10 @@ public class PaymentService {
 
     @Transactional(readOnly = true)
     public List<PaymentResponseDto> findPaymentsByInvoiceId(UUID id) {
+        if(!invoiceRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Invoice not found. ID: " + id);
+        }
+
         return paymentRepository
                 .findPaymentsByInvoiceId(id)
                 .stream().map(PaymentMapper::toDto).toList();
@@ -69,7 +74,7 @@ public class PaymentService {
     @Transactional(readOnly = true)
     public List<PaymentResponseDto> findPaymentsByCustomerId(UUID id) {
         if(!customerRepository.existsById(id)) {
-            throw new InvalidCustomerException("Customer not found. ID: " + id);
+            throw new ResourceNotFoundException("Customer not found. ID: " + id);
         }
         return paymentRepository
                 .findPaymentsByCustomerId(id)
@@ -86,13 +91,14 @@ public class PaymentService {
     @Transactional(readOnly = true)
     public List<PaymentResponseDto> findPaymentsByCustomerDocument(String document) {
         if(!customerRepository.existsByDocument(document)) {
-            throw new InvalidCustomerException("Document not found. Document: " + document);
+            throw new ResourceNotFoundException("Customer not found. Document: " + document);
         }
         return paymentRepository
                 .findPaymentsByCustomerDocument(document)
                 .stream().map(PaymentMapper::toDto).toList();
     }
 
+    @Transactional(readOnly = true)
     public List<PaymentResponseDto> findPaymentsGreaterThan(BigDecimal amount) {
         return paymentRepository
                 .findPaymentsGreaterThan(amount)
@@ -102,7 +108,7 @@ public class PaymentService {
     @Transactional(readOnly = true)
     public List<PaymentResponseDto> findPaymentsByCustomerIdEqualOrGreaterThan(UUID id, BigDecimal amount) {
         if(!customerRepository.existsById(id)) {
-            throw new InvalidCustomerException("Customer not found. ID: " + id);
+            throw new ResourceNotFoundException("Customer not found. ID: " + id);
         }
 
         return paymentRepository

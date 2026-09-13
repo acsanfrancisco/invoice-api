@@ -8,6 +8,7 @@ import acsanfrancisco.invoice_system.entity.Invoice;
 import acsanfrancisco.invoice_system.entity.enums.InvoiceStatus;
 import acsanfrancisco.invoice_system.exception.InvalidCustomerException;
 import acsanfrancisco.invoice_system.exception.InvalidInvoiceException;
+import acsanfrancisco.invoice_system.exception.ResourceNotFoundException;
 import acsanfrancisco.invoice_system.mapper.InvoiceMapper;
 import acsanfrancisco.invoice_system.repository.CustomerRepository;
 import acsanfrancisco.invoice_system.repository.InvoiceRepository;
@@ -36,7 +37,7 @@ public class InvoiceService {
     @Transactional
     public InvoiceResponseDto createInvoice (CreateInvoiceDto dto){
         Customer customer = customerRepository.findById(dto.getCustomerId())
-                .orElseThrow(()->new InvalidInvoiceException("Customer not found. ID: " + dto.getCustomerId()));
+                .orElseThrow(()->new ResourceNotFoundException("Customer not found. ID: " + dto.getCustomerId()));
 
         if(!customer.getIsActive()){
             throw new InvalidCustomerException("Customer is not active. ID: " + dto.getCustomerId());
@@ -64,12 +65,15 @@ public class InvoiceService {
         if(invoice.getStatus() == InvoiceStatus.CANCELLED ||
             invoice.getStatus() == InvoiceStatus.PARTIALLY_PAID ||
             invoice.getStatus() == InvoiceStatus.PAID){
-            throw new InvalidInvoiceException("Impossible to update an invoice with status: " + invoice.getStatus() + ". ID: " + dto.getId());
+            throw new InvalidInvoiceException("Impossible to update an invoice with status: " + invoice.getStatus() + ". ID: " + id);
         }
 
         if(dto.getCustomerId() != null){
             Customer customer = customerRepository.findById(dto.getCustomerId())
-                    .orElseThrow(()->new InvalidCustomerException("Costumer not found for ID: " + dto.getCustomerId()));
+                    .orElseThrow(()->new ResourceNotFoundException("Customer not found for ID: " + dto.getCustomerId()));
+            if(!customer.getIsActive()){
+                throw new InvalidCustomerException("Customer is not active. ID: " + dto.getCustomerId());
+            }
             invoice.setCustomer(customer);
         }
 
@@ -87,7 +91,7 @@ public class InvoiceService {
     @Transactional
     public void setInvoiceCancelled(UUID id){
         Invoice invoice = invoiceRepository.findById(id)
-                .orElseThrow(()->new InvalidInvoiceException("Invoice not found for ID: " + id));
+                .orElseThrow(()->new ResourceNotFoundException("Invoice not found for ID: " + id));
         if(invoice.getStatus() == InvoiceStatus.CANCELLED){
             throw new InvalidInvoiceException("Invoice is already set cancelled. ID: " + invoice.getId());
         }
@@ -97,14 +101,14 @@ public class InvoiceService {
     @Transactional(readOnly = true)
     public InvoiceResponseDto findInvoiceById(UUID id) {
         Invoice invoice = invoiceRepository.findById(id)
-                .orElseThrow(()->new InvalidInvoiceException("Invoice not found for ID: " + id));
+                .orElseThrow(()->new ResourceNotFoundException("Invoice not found for ID: " + id));
         return InvoiceMapper.toDto(invoice);
     }
 
     @Transactional(readOnly = true)
     public List<InvoiceResponseDto> findInvoicesByCustomerId(UUID id) {
         if(!customerRepository.existsById(id)){
-            throw new InvalidCustomerException("Customer not found. ID: " + id);
+            throw new ResourceNotFoundException("Customer not found. ID: " + id);
         }
         List<Invoice> invoices = invoiceRepository.findInvoiceByCustomerId(id);
         return invoices.stream().map(InvoiceMapper::toDto).toList();
@@ -113,7 +117,7 @@ public class InvoiceService {
     @Transactional(readOnly = true)
     public List<InvoiceResponseDto> findInvoiceByCustomerDocument(String document) {
         if(!customerRepository.existsByDocument(document)){
-            throw new InvalidCustomerException("Customer not found. Document: " + document);
+            throw new ResourceNotFoundException("Customer not found. Document: " + document);
         }
 
         List<Invoice> invoices = invoiceRepository.findInvoiceByCustomerDocument(document);
@@ -123,7 +127,7 @@ public class InvoiceService {
     @Transactional(readOnly = true)
     public List<InvoiceResponseDto> findInvoiceByCustomerWhatsappNumber(String whatsappNumber) {
         if(!customerRepository.existsByWhatsappNumber(whatsappNumber)){
-            throw new InvalidCustomerException("Customer not found. Whatsapp Number: " + whatsappNumber);
+            throw new ResourceNotFoundException("Customer not found. Whatsapp Number: " + whatsappNumber);
         }
 
         List<Invoice> invoices = invoiceRepository.findInvoiceByCustomerWhatsappNumber(whatsappNumber);
