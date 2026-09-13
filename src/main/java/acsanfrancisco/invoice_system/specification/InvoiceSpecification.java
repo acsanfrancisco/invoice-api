@@ -64,12 +64,12 @@ public class InvoiceSpecification {
 
     public static Specification<Invoice> issuedAtFrom(LocalDate issuedAtFrom) {
         return(Root<Invoice> root, CriteriaQuery<?> query, CriteriaBuilder cb) -> issuedAtFrom == null ? null :
-                cb.greaterThanOrEqualTo(root.get("issuedAt"), issuedAtFrom.atStartOfDay().atZone(ZoneId.systemDefault()));
+                cb.greaterThanOrEqualTo(root.get("issuedAt"), issuedAtFrom.atStartOfDay());
     }
 
     public static Specification<Invoice> issuedAtUntil(LocalDate issuedAtUntil) {
         return(Root<Invoice> root, CriteriaQuery<?> query, CriteriaBuilder cb) -> issuedAtUntil == null ? null :
-                cb.lessThan(root.get("issuedAt"), issuedAtUntil.plusDays(1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+                cb.lessThan(root.get("issuedAt"), issuedAtUntil.plusDays(1).atStartOfDay());
     }
 
     public static Specification<Invoice> dueDateFrom(LocalDate dueDateFrom) {
