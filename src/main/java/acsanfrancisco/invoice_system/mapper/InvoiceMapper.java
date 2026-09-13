@@ -24,6 +24,7 @@ public class InvoiceMapper {
         dto.setGrossValue(invoice.getGrossValue());
         dto.setDiscount(invoice.getDiscount());
         dto.setNetValue(invoice.getNetValue());
+        dto.setYetToPay(invoice.getYetToPay());
         dto.setStatus(invoice.getStatus());
         dto.setNote(invoice.getNote());
         dto.setCustomer(CustomerMapper.toDto(invoice.getCustomer()));

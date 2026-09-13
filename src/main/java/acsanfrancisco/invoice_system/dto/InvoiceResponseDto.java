@@ -24,6 +24,8 @@ public class InvoiceResponseDto {
 
     private BigDecimal netValue;
 
+    private BigDecimal yetToPay;
+
     private InvoiceStatus status;
 
     private String note;
