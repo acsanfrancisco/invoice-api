@@ -57,9 +57,9 @@ public class InvoiceService {
     }
 
     @Transactional
-    public InvoiceResponseDto updateInvoice(UpdateInvoiceDto dto){
-        Invoice invoice = invoiceRepository.findById(dto.getId())
-                .orElseThrow(()->new InvalidInvoiceException("Invoice not found for ID: " + dto.getId()));
+    public InvoiceResponseDto updateInvoice(UUID id, UpdateInvoiceDto dto){
+        Invoice invoice = invoiceRepository.findById(id)
+                .orElseThrow(()->new ResourceNotFoundException("Invoice not found for ID: " + id));
 
         if(invoice.getStatus() == InvoiceStatus.CANCELLED ||
             invoice.getStatus() == InvoiceStatus.PARTIALLY_PAID ||
