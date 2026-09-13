@@ -32,7 +32,7 @@ public class InvoiceController {
                 .body(invoiceService.createInvoice(dto));
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<InvoiceResponseDto> updateInvoice(@PathVariable UUID id ,@RequestBody @Valid UpdateInvoiceDto dto){
         return ResponseEntity
                 .status(HttpStatus.OK)
