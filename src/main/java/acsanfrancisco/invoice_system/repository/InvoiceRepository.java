@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -24,9 +23,52 @@ public interface InvoiceRepository extends JpaRepository<Invoice, UUID>, JpaSpec
     List<Invoice> findInvoiceByCustomerWhatsappNumber(@Param("whatsappNumber") String whatsappNumber);
 
     @Modifying
-    @Query("UPDATE Invoice i SET i.status = :status WHERE i.status = :currentStatus AND i.dueDate < :currentDate")
+    @Query("""
+    UPDATE Invoice i
+    SET i.status = :status,
+        i.discount = 0.00,
+        i.netValue = i.grossValue,
+        i.yetToPay = i.grossValue
+    WHERE i.status = :currentStatus
+        AND i.dueDate < :currentDate
+    """)
     void setInvoiceStatusToOverdue(@Param("currentDate") LocalDate currentDate,@Param("status") InvoiceStatus status,@Param("currentStatus") InvoiceStatus currentStatus);
 
-    @Query("SELECT i from Invoice i WHERE i.status = :status")
-    List<Invoice> findInvoicesByStatus(@Param("status") InvoiceStatus status);
+    @Query("""
+    SELECT i
+    FROM Invoice i
+    WHERE i.status = :status
+    AND i.lastMessageSentAt is NULL
+    """)
+    List<Invoice> findInvoicesForIssuedNotification(@Param("status") InvoiceStatus status);
+
+    @Query("""
+    SELECT i
+    FROM Invoice i
+    WHERE i.status = :status
+    AND i.dueDate = :today
+""")
+    List<Invoice> findInvoicesForDueTodayNotification(@Param("status") InvoiceStatus status,  @Param("today") LocalDate today);
+
+    @Query("""
+    SELECT i
+    FROM Invoice i
+    WHERE i.status = :status
+    AND (
+        i.lastMessageSentAt is NULL
+        OR
+        i.lastMessageSentAt < :comparingDate
+    )""")
+    List<Invoice> findInvoicesForOverdueNotification(@Param("status") InvoiceStatus status, @Param("comparingDate") LocalDate comparingDate);
+
+    @Query("""
+    SELECT i
+    FROM Invoice i
+    WHERE i.status = :status
+    AND (
+        i.lastMessageSentAt is NULL
+        OR
+        i.lastMessageSentAt < :comparingDate
+    )""")
+    List<Invoice> findInvoicesForPartialPaymentNotification(@Param("status") InvoiceStatus status, @Param("comparingDate") LocalDate comparingDate);
 }

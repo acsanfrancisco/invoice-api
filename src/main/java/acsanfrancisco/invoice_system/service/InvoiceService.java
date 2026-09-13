@@ -168,8 +168,8 @@ public class InvoiceService {
     }
 
     @Transactional(readOnly = true)
-    public List<Invoice> findInvoicesByStatus(InvoiceStatus status){
-        return invoiceRepository.findInvoicesByStatus(status);
+    public List<Invoice> processIssuedInvoiceNotification(InvoiceStatus status){
+        return invoiceRepository.findInvoicesForIssuedNotification(status);
     }
 
     @Transactional
@@ -178,4 +178,18 @@ public class InvoiceService {
         invoiceRepository.save(invoice);
     }
 
+    @Transactional(readOnly = true)
+    public List<Invoice> processDueTodayInvoiceNotification(InvoiceStatus status, LocalDate today){
+        return invoiceRepository.findInvoicesForDueTodayNotification(status, today);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Invoice> processOverdueInvoiceNotification(InvoiceStatus status, LocalDate comparingDate){
+        return invoiceRepository.findInvoicesForOverdueNotification(status, comparingDate);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Invoice> processPartiallyPaidInvoiceNotification(InvoiceStatus status, LocalDate comparingDate){
+        return invoiceRepository.findInvoicesForPartialPaymentNotification(status, comparingDate);
+    }
 }
