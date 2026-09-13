@@ -1,6 +1,6 @@
 package acsanfrancisco.invoice_system.entity.enums;
 
-import acsanfrancisco.invoice_system.exception.InvalidDocumentType;
+import acsanfrancisco.invoice_system.exception.InvalidDocumentTypeException;
 
 public enum DocumentType {
 
@@ -14,6 +14,6 @@ public enum DocumentType {
         if(document.length() == 14){
             return DocumentType.CNPJ;
         }
-        throw new InvalidDocumentType("Inform a valid document pattern");
+        throw new InvalidDocumentTypeException("Inform a valid document pattern");
     }
 }
