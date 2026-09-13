@@ -43,6 +43,10 @@ public class InvoiceService {
             throw new InvalidCustomerException("Customer is not active. ID: " + dto.getCustomerId());
         }
 
+        if(dto.getGrossValue().compareTo(dto.getDiscount()) <= 0){
+            throw new InvalidInvoiceException("GrossValue must be greater than discount");
+        }
+
         Invoice invoice = InvoiceMapper.toEntity(dto, customer);
 
         LocalDateTime now =  LocalDateTime.now();
@@ -79,11 +83,17 @@ public class InvoiceService {
 
         BigDecimal discount = dto.getDiscount() != null ? dto.getDiscount() : invoice.getDiscount();
         BigDecimal grossValue = dto.getGrossValue() != null ? dto.getGrossValue() : invoice.getGrossValue();
+
+        if(grossValue.compareTo(discount)<= 0){
+            throw new InvalidInvoiceException("GrossValue must be greater than discount");
+        }
+
         String note = dto.getNote() != null ? dto.getNote() : invoice.getNote();
         invoice.setDiscount(discount);
         invoice.setGrossValue(grossValue);
         invoice.setNote(note);
         invoice.setNetValue(grossValue.subtract(discount));
+        invoice.setYetToPay(invoice.getNetValue());
         return InvoiceMapper
                 .toDto(invoiceRepository.save(invoice));
     }
