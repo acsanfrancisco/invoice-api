@@ -13,9 +13,6 @@ import java.util.UUID;
 @Setter
 public class UpdateInvoiceDto {
 
-    @NotNull(message = "Must inform the Invoice ID")
-    private UUID id;
-
     @Positive(message = "Gross value must be greater than zero")
     private BigDecimal grossValue;
 

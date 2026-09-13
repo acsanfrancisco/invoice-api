@@ -16,7 +16,7 @@ public class CreateInvoiceDto {
     @Positive(message = "Gross value must be greater than zero")
     private BigDecimal grossValue;
 
-    @NotNull
+    @NotNull(message = "Must inform discount")
     @PositiveOrZero(message = "Discount must not be negative")
     private BigDecimal discount;
 
