@@ -6,8 +6,6 @@ import acsanfrancisco.invoice_system.entity.Invoice;
 import acsanfrancisco.invoice_system.entity.Payment;
 import acsanfrancisco.invoice_system.entity.enums.InvoiceStatus;
 import acsanfrancisco.invoice_system.entity.enums.PaymentMethod;
-import acsanfrancisco.invoice_system.exception.InvalidCustomerException;
-import acsanfrancisco.invoice_system.exception.InvalidInvoiceException;
 import acsanfrancisco.invoice_system.exception.InvalidPaymentException;
 import acsanfrancisco.invoice_system.exception.ResourceNotFoundException;
 import acsanfrancisco.invoice_system.mapper.PaymentMapper;
@@ -99,32 +97,14 @@ public class PaymentService {
     }
 
     @Transactional(readOnly = true)
-    public List<PaymentResponseDto> findPaymentsGreaterThan(BigDecimal amount) {
-        return paymentRepository
-                .findPaymentsGreaterThan(amount)
-                .stream().map(PaymentMapper::toDto).toList();
-    }
-
-    @Transactional(readOnly = true)
-    public List<PaymentResponseDto> findPaymentsByCustomerIdEqualOrGreaterThan(UUID id, BigDecimal amount) {
-        if(!customerRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Customer not found. ID: " + id);
-        }
-
-        return paymentRepository
-                .findPaymentsByCustomerIdEqualOrGreaterThan(id ,amount)
-                .stream().map(PaymentMapper::toDto).toList();
-    }
-
-    @Transactional(readOnly = true)
-    public Page<PaymentResponseDto> search(LocalDate paymentDate, BigDecimal amount,
-                                           PaymentMethod paymentMethod, UUID invoiceId,
+    public Page<PaymentResponseDto> search(UUID id, UUID invoiceId, UUID customerId, PaymentMethod paymentMethod,
+                                           LocalDate paymentDate, LocalDate paymentDateFrom, LocalDate paymentDateUntil,
+                                           BigDecimal amountFrom, BigDecimal amountUntil,
                                            Pageable pageable) {
         Specification<Payment> specification = Specification.allOf(
-                paymentDateEquals(paymentDate),
-                amountEquals(amount),
-                paymentMethodEquals(paymentMethod),
-                invoiceIdEquals(invoiceId));
+                paymentIdEquals(id), invoiceIdEquals(invoiceId), customerIdEquals(customerId), paymentMethodEquals(paymentMethod),
+                paymentDateEquals(paymentDate), paymentDateFrom(paymentDateFrom), paymentDateUntil(paymentDateUntil),
+                amountFrom(amountFrom), amountUntil(amountUntil));
         return paymentRepository.findAll(specification, pageable).map(PaymentMapper::toDto);
     }
 }

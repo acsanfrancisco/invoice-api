@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -23,11 +22,4 @@ public interface PaymentRepository extends JpaRepository<Payment, UUID>, JpaSpec
 
     @Query("SELECT p from Payment p WHERE p.paymentDate = :paymentDate")
     List<Payment> findPaymentsByPaymentDate(@Param("paymentDate") LocalDate paymentDate);
-
-    @Query("SELECT p from Payment p WHERE p.amount >= :amount")
-    List<Payment> findPaymentsGreaterThan(@Param("amount") BigDecimal amount);
-
-    @Query("SELECT p from Payment p WHERE p.invoice.customer.id = :customerId AND p.amount >= :amount")
-    List<Payment> findPaymentsByCustomerIdEqualOrGreaterThan(@Param("customerId") UUID customerId, @Param("amount")BigDecimal amount);
-
 }

@@ -59,31 +59,20 @@ public class PaymentController {
                 .body(paymentService.findPaymentsByCustomerDocument(document));
     }
 
-    @GetMapping(params = "amount")
-    public ResponseEntity<List<PaymentResponseDto>> findPaymentsGreaterThan(@RequestParam("amount") BigDecimal amount) {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(paymentService.findPaymentsGreaterThan(amount));
-
-    }
-
-    @GetMapping(value = "/customers/{customerId}", params = "amount")
-    public ResponseEntity<List<PaymentResponseDto>> findPaymentsByCustomerIdGreaterThan(@PathVariable UUID customerId, @RequestParam("amount") BigDecimal amount) {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(paymentService.findPaymentsByCustomerIdEqualOrGreaterThan(customerId, amount));
-    }
-
     @GetMapping("/search")
     public ResponseEntity<Page<PaymentResponseDto>> search(
-            @RequestParam(value = "paymentDate", required = false) LocalDate paymentDate,
-            @RequestParam(value = "amount", required = false) BigDecimal amount,
-            @RequestParam(value = "paymentMethod", required = false) PaymentMethod paymentMethod,
+            @RequestParam(value = "id", required = false) UUID id,
             @RequestParam(value = "invoiceId", required = false) UUID invoiceId,
-            @PageableDefault(page = 0, size = 10) Pageable pageable ) {
+            @RequestParam(value = "customerId", required = false) UUID customerId,
+            @RequestParam(value = "paymentMethod", required = false) PaymentMethod paymentMethod,
+            @RequestParam(value = "paymentDate", required = false) LocalDate paymentDate,
+            @RequestParam(value = "paymentDateFrom", required = false) LocalDate paymentDateFrom,
+            @RequestParam(value = "paymentDateUntil", required = false) LocalDate paymentDateUntil,
+            @RequestParam(value = "amountFrom", required = false) BigDecimal amountFrom,
+            @RequestParam(value = "amountUntil", required = false) BigDecimal amountUntil,
+            @PageableDefault(page = 0, size = 10) Pageable pageable) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(paymentService.search(paymentDate, amount, paymentMethod, invoiceId, pageable));
-
+                .body(paymentService.search(id, invoiceId, customerId, paymentMethod, paymentDate, paymentDateFrom, paymentDateUntil, amountFrom, amountUntil, pageable));
     }
 }
