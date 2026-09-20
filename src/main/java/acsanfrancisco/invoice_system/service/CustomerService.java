@@ -9,6 +9,7 @@ import acsanfrancisco.invoice_system.exception.InvalidCustomerException;
 import acsanfrancisco.invoice_system.exception.ResourceNotFoundException;
 import acsanfrancisco.invoice_system.mapper.CustomerMapper;
 import acsanfrancisco.invoice_system.repository.CustomerRepository;
+import acsanfrancisco.invoice_system.repository.InvoiceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +26,7 @@ import static acsanfrancisco.invoice_system.specification.CustomerSpecification.
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
+    private final InvoiceRepository invoiceRepository;
 
     @Transactional
     public CustomerResponseDto createCustomer(CreateCustomerDto dto) {
@@ -62,6 +64,11 @@ public class CustomerService {
         Customer customer = customerRepository
                 .findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found. Id: " + id));
+
+        if(invoiceRepository.existsByCustomerId(customer.getId())){
+            throw new InvalidCustomerException("Must not delete a Customer with Invoices. ID: " + id);
+        }
+
         customerRepository.delete(customer);
     }
 

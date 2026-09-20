@@ -22,6 +22,8 @@ public interface InvoiceRepository extends JpaRepository<Invoice, UUID>, JpaSpec
     @Query("SELECT i from Invoice i WHERE i.customer.whatsappNumber = :whatsappNumber")
     List<Invoice> findInvoiceByCustomerWhatsappNumber(@Param("whatsappNumber") String whatsappNumber);
 
+    boolean existsByCustomerId(UUID customerId);
+
     @Modifying
     @Query("""
     UPDATE Invoice i
