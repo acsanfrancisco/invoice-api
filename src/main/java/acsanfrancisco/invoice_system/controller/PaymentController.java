@@ -1,7 +1,7 @@
 package acsanfrancisco.invoice_system.controller;
 
-import acsanfrancisco.invoice_system.dto.CreatePaymentDto;
-import acsanfrancisco.invoice_system.dto.PaymentResponseDto;
+import acsanfrancisco.invoice_system.dto.request.CreatePaymentDto;
+import acsanfrancisco.invoice_system.dto.response.PaymentResponseDto;
 import acsanfrancisco.invoice_system.entity.enums.PaymentMethod;
 import acsanfrancisco.invoice_system.service.PaymentService;
 import jakarta.validation.Valid;

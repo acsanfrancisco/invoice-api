@@ -1,4 +1,4 @@
-package acsanfrancisco.invoice_system.dto;
+package acsanfrancisco.invoice_system.dto.response;
 
 import lombok.Getter;
 import lombok.Setter;

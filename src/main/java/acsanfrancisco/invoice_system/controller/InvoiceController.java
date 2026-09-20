@@ -1,8 +1,8 @@
 package acsanfrancisco.invoice_system.controller;
 
-import acsanfrancisco.invoice_system.dto.CreateInvoiceDto;
-import acsanfrancisco.invoice_system.dto.InvoiceResponseDto;
-import acsanfrancisco.invoice_system.dto.UpdateInvoiceDto;
+import acsanfrancisco.invoice_system.dto.request.CreateInvoiceDto;
+import acsanfrancisco.invoice_system.dto.response.InvoiceResponseDto;
+import acsanfrancisco.invoice_system.dto.request.UpdateInvoiceDto;
 import acsanfrancisco.invoice_system.entity.enums.InvoiceStatus;
 import acsanfrancisco.invoice_system.service.InvoiceService;
 import jakarta.validation.Valid;

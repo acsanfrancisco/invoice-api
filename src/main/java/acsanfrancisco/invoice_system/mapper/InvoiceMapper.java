@@ -1,7 +1,7 @@
 package acsanfrancisco.invoice_system.mapper;
 
-import acsanfrancisco.invoice_system.dto.CreateInvoiceDto;
-import acsanfrancisco.invoice_system.dto.InvoiceResponseDto;
+import acsanfrancisco.invoice_system.dto.request.CreateInvoiceDto;
+import acsanfrancisco.invoice_system.dto.response.InvoiceResponseDto;
 import acsanfrancisco.invoice_system.entity.Customer;
 import acsanfrancisco.invoice_system.entity.Invoice;
 

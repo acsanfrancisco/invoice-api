@@ -1,8 +1,8 @@
 package acsanfrancisco.invoice_system.service;
 
-import acsanfrancisco.invoice_system.dto.CreateCustomerDto;
-import acsanfrancisco.invoice_system.dto.CustomerResponseDto;
-import acsanfrancisco.invoice_system.dto.UpdateCustomerDto;
+import acsanfrancisco.invoice_system.dto.request.CreateCustomerDto;
+import acsanfrancisco.invoice_system.dto.response.CustomerResponseDto;
+import acsanfrancisco.invoice_system.dto.request.UpdateCustomerDto;
 import acsanfrancisco.invoice_system.entity.Customer;
 import acsanfrancisco.invoice_system.entity.enums.DocumentType;
 import acsanfrancisco.invoice_system.exception.InvalidCustomerException;

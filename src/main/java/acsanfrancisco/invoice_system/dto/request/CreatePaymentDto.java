@@ -1,4 +1,4 @@
-package acsanfrancisco.invoice_system.dto;
+package acsanfrancisco.invoice_system.dto.request;
 
 import acsanfrancisco.invoice_system.entity.enums.PaymentMethod;
 import jakarta.validation.constraints.NotNull;

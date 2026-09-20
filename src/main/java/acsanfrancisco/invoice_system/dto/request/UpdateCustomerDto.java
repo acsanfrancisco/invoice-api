@@ -1,4 +1,4 @@
-package acsanfrancisco.invoice_system.dto;
+package acsanfrancisco.invoice_system.dto.request;
 
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Pattern;

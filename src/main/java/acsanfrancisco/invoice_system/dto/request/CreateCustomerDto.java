@@ -1,8 +1,7 @@
-package acsanfrancisco.invoice_system.dto;
+package acsanfrancisco.invoice_system.dto.request;
 
 import acsanfrancisco.invoice_system.validation.ValidDocument;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;

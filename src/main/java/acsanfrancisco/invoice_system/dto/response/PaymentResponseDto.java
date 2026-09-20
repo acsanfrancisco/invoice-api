@@ -1,4 +1,4 @@
-package acsanfrancisco.invoice_system.dto;
+package acsanfrancisco.invoice_system.dto.response;
 
 import acsanfrancisco.invoice_system.entity.enums.PaymentMethod;
 import lombok.Getter;

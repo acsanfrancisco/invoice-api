@@ -1,8 +1,8 @@
 package acsanfrancisco.invoice_system.controller;
 
-import acsanfrancisco.invoice_system.dto.CreateCustomerDto;
-import acsanfrancisco.invoice_system.dto.CustomerResponseDto;
-import acsanfrancisco.invoice_system.dto.UpdateCustomerDto;
+import acsanfrancisco.invoice_system.dto.request.CreateCustomerDto;
+import acsanfrancisco.invoice_system.dto.response.CustomerResponseDto;
+import acsanfrancisco.invoice_system.dto.request.UpdateCustomerDto;
 import acsanfrancisco.invoice_system.entity.enums.DocumentType;
 import acsanfrancisco.invoice_system.service.CustomerService;
 import jakarta.validation.Valid;
@@ -13,7 +13,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.UUID;
 
